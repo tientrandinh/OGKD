@@ -50,12 +50,6 @@ def reset_cfg(cfg, args):
     if args.seed:
         cfg.SEED = args.seed
 
-    if args.source_domains:
-        cfg.DATASET.SOURCE_DOMAINS = args.source_domains
-
-    if args.target_domains:
-        cfg.DATASET.TARGET_DOMAINS = args.target_domains
-
     if args.transforms:
         cfg.INPUT.TRANSFORMS = args.transforms
 
@@ -64,9 +58,6 @@ def reset_cfg(cfg, args):
 
     if args.backbone:
         cfg.MODEL.BACKBONE.NAME = args.backbone
-
-    if args.head:
-        cfg.MODEL.HEAD.NAME = args.head
 
 
 def extend_cfg(cfg):
@@ -162,12 +153,6 @@ if __name__ == "__main__":
         "--seed", type=int, default=-1, help="only positive value enables a fixed seed"
     )
     parser.add_argument(
-        "--source-domains", type=str, nargs="+", help="source domains for DA/DG"
-    )
-    parser.add_argument(
-        "--target-domains", type=str, nargs="+", help="target domains for DA/DG"
-    )
-    parser.add_argument(
         "--transforms", type=str, nargs="+", help="data augmentation methods"
     )
     parser.add_argument(
@@ -180,8 +165,7 @@ if __name__ == "__main__":
         help="path to config file for dataset setup",
     )
     parser.add_argument("--trainer", type=str, default="", help="name of trainer")
-    parser.add_argument("--backbone", type=str, default="", help="name of CNN backbone")
-    parser.add_argument("--head", type=str, default="", help="name of head")
+    parser.add_argument("--backbone", type=str, default="", help="name of backbone")
     parser.add_argument("--eval-only", action="store_true", help="evaluation only")
     parser.add_argument(
         "--model-dir",
