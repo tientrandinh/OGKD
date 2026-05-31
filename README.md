@@ -2,7 +2,7 @@
 
 ![OGKD method overview](figure/detailed_method.png)
 
-<p align="center"><em>Overview of the OGKD framework (vector source: <a href="figure/detailed_method.pdf"><code>figure/detailed_method.pdf</code></a>).</em></p>
+<p align="center"><em>Overview of the OGKD framework.</em></p>
 
 From biomedical text prototypes, we build a class graph **W** that captures
 semantic relations among classes. A geometry strength γ smooths the teacher
