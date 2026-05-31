@@ -1,14 +1,5 @@
 #!/usr/bin/env python3
-"""Collect OGKD run results from per-seed training logs and write an Excel file.
-
-Reuses the same parsing convention as the training pipeline: the final test
-block starts at a line "=> result", followed by "* accuracy: X%" and (for
-few-shot) "* macro_f1: X%".
-
-Logs are expected under <results-dir>/logs/<dataset>/:
-  - base2novel: seed{S}_train.log (base acc) and seed{S}_novel_eval.log (novel acc)
-  - fewshot:    seed{S}_train.log (acc, macro_f1)
-
+"""Collect OGKD run results from per-seed training logs and write an Excel file for convenience.
 Usage:
   python scripts/results_to_excel.py --mode base2novel \
       --results-dir <DIR> --datasets btmri ... --seeds 1 2 3 --shots 16 --out out.xlsx
@@ -23,31 +14,27 @@ from openpyxl import Workbook
 from openpyxl.styles import Font
 
 ACC_RE = re.compile(r"^\*\s*accuracy:\s*([0-9.]+)%$")
-F1_RE = re.compile(r"^\*\s*macro_f1:\s*([0-9.]+)%$")
 
 
 def parse_last_result(path):
-    """Return (accuracy, macro_f1) from the last '=> result' block, or (None, None)."""
+    """Return the accuracy from the last '=> result' block, or None."""
     if not os.path.isfile(path):
-        return None, None
-    acc, f1 = None, None
+        return None
+    acc = None
     in_result = False
     with open(path, "r", errors="ignore") as f:
         for raw in f:
             line = raw.strip()
             if line == "=> result":
                 in_result = True
-                acc, f1 = None, None  # reset so we keep the LAST block
+                acc = None  # reset so we keep the LAST block
                 continue
             if not in_result:
                 continue
             m = ACC_RE.match(line)
             if m:
                 acc = float(m.group(1))
-            m = F1_RE.match(line)
-            if m:
-                f1 = float(m.group(1))
-    return acc, f1
+    return acc
 
 
 def mean_std(vals):
@@ -83,8 +70,8 @@ def build_base2novel(ws, results_dir, datasets, seeds):
         logs = os.path.join(results_dir, "logs", ds)
         d_base, d_novel = [], []
         for s in seeds:
-            base_acc, _ = parse_last_result(os.path.join(logs, f"seed{s}_train.log"))
-            novel_acc, _ = parse_last_result(os.path.join(logs, f"seed{s}_novel_eval.log"))
+            base_acc = parse_last_result(os.path.join(logs, f"seed{s}_train.log"))
+            novel_acc = parse_last_result(os.path.join(logs, f"seed{s}_novel_eval.log"))
             ws.append([ds, s, fmt(base_acc), fmt(novel_acc), fmt(harmonic(base_acc, novel_acc))])
             if base_acc is not None:
                 d_base.append(base_acc)
@@ -107,33 +94,26 @@ def build_base2novel(ws, results_dir, datasets, seeds):
 
 
 def build_fewshot(ws, results_dir, datasets, seeds, shots):
-    ws.append(["dataset", "shots", "seed", "accuracy", "macro_f1"])
+    ws.append(["dataset", "shots", "seed", "accuracy"])
     bold(ws, ws.max_row)
-    all_acc, all_f1 = [], []
+    all_acc = []
     for ds in datasets:
         logs = os.path.join(results_dir, "logs", ds)
-        d_acc, d_f1 = [], []
+        d_acc = []
         for s in seeds:
-            acc, f1 = parse_last_result(os.path.join(logs, f"seed{s}_train.log"))
-            ws.append([ds, shots, s, fmt(acc), fmt(f1)])
+            acc = parse_last_result(os.path.join(logs, f"seed{s}_train.log"))
+            ws.append([ds, shots, s, fmt(acc)])
             if acc is not None:
                 d_acc.append(acc)
-            if f1 is not None:
-                d_f1.append(f1)
         ma, sa = mean_std(d_acc)
-        mf, sf = mean_std(d_f1)
         acc_cell = f"{ma:.2f}±{sa:.2f}" if ma is not None else "N/A"
-        f1_cell = f"{mf:.2f}±{sf:.2f}" if mf is not None else "N/A"
-        ws.append([ds, shots, "mean±std", acc_cell, f1_cell])
+        ws.append([ds, shots, "mean±std", acc_cell])
         bold(ws, ws.max_row)
         if ma is not None:
             all_acc.append(ma)
-        if mf is not None:
-            all_f1.append(mf)
     if len(datasets) > 1:
         ma, _ = mean_std(all_acc)
-        mf, _ = mean_std(all_f1)
-        ws.append(["AVERAGE", shots, "", fmt(ma), fmt(mf)])
+        ws.append(["AVERAGE", shots, "", fmt(ma)])
         bold(ws, ws.max_row)
 
 
