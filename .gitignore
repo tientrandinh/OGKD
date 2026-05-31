@@ -1,0 +1,14 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Run artifacts (regenerated)
+output/
+results/
+hf_cache/
+*.pth.tar
+*.log
+
+# OS
+.DS_Store
