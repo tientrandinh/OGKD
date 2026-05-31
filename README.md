@@ -38,9 +38,6 @@ python scripts/download_data.py        # downloads to $DATA_ROOT (default /works
 python scripts/copy_dataset_jsons.py   # installs the official split JSONs (from data/) into $DATA_ROOT
 ```
 
-The BiomedCLIP backbone weights are downloaded automatically from the
-HuggingFace Hub on first run.
-
 ## Training and Evaluation
 
 ```bash
