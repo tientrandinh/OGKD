@@ -54,7 +54,7 @@ bash scripts/run_fewshot.sh --datasets btmri busi chmnist covid ctkidney dermamn
 Each run writes per-seed logs and an **Excel** summary under `results/<...>/`:
 
 - base-to-novel → `results_base2novel.xlsx` (`base_acc`, `novel_acc`, `HM`),
-- few-shot → `results_fewshot_<K>shot.xlsx` (`accuracy`, `macro_f1`, mean±std).
+- few-shot → `results_fewshot_<K>shot.xlsx` (`accuracy`, mean±std).
 
 You can also regenerate the Excel from existing logs:
 
