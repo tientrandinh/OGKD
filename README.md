@@ -11,7 +11,7 @@ global `[IMG]` token; (2) **LGD** operates at patch-token level, where `c` denot
 the ground-truth class. Only the student prompts are updated; the encoders and
 **W** remain frozen.
 
-## Env Setup
+## Installation
 We use [micromamba](https://mamba.readthedocs.io/en/latest/installation/micromamba-installation.html) 
 to create the environment.
 
@@ -41,7 +41,7 @@ python scripts/copy_dataset_jsons.py   # installs the official split JSONs (from
 The BiomedCLIP backbone weights are downloaded automatically from the
 HuggingFace Hub on first run.
 
-## Running
+## Training and Evaluation
 
 ```bash
 # Base-to-novel generalization (train base 16-shot, evaluate novel), 3 seeds.
