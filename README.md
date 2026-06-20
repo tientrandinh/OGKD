@@ -1,4 +1,20 @@
-# OGKD: Omni-Geometry Knowledge Distillation for Prompt Tuning Biomedical Vision-Language Models
+<h1 align="center">OGKD: Omni-Geometry Knowledge Distillation for Prompt Tuning Biomedical Vision-Language Models</h1>
+
+<p align="center">
+  <b>Official implementation of our paper</b>
+  <a href="https://arxiv.org/abs/2606.04922">
+    <img align="absmiddle" src="https://img.shields.io/badge/arXiv-2606.04922-b31b1b.svg" alt="arXiv">
+  </a>
+</p>
+
+<p align="center">
+  <a href="https://scholar.google.com/citations?user=NTeODecAAAAJ&amp;hl=vi">Tran Dinh Tien</a>
+  &nbsp;&middot;&nbsp;
+  <a href="https://zhiqiangshen.com/">Zhiqiang Shen</a>
+</p>
+
+
+<p align="center">VILA Lab, MBZUAI</p>
 
 ![OGKD method overview](figure/detailed_method.png)
 
@@ -77,3 +93,4 @@ data/<DS>/split_<DS>.json      train/val/test split files
 scripts/                       run_base2novel.sh, run_fewshot.sh, data + Excel helpers
 Dassl.pytorch/, open_clip/     vendored third-party frameworks
 ```
+
